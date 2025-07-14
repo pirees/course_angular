@@ -1,26 +1,31 @@
+import { AuthService } from './../auth/auth.service';
 import { RecipeService } from './../recipes/recipe.service';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Recipe } from '../recipes/recipe.model';
-import { map, Observable, tap } from 'rxjs';
+import { exhaustMap, map, Observable, take, tap } from 'rxjs';
 
-@Injectable({providedIn: "root"})
-export class DataStorageService{
-  constructor(private http: HttpClient, private recipeService: RecipeService) {}
+@Injectable({ providedIn: "root" })
+export class DataStorageService {
+  constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService) { }
 
-  storeRecipes(){
+  storeRecipes() {
     const recipes = this.recipeService.getRecipes();
     return this.http.put('https://ng-course-recipe-book-ccee8-default-rtdb.firebaseio.com/recipes.json', recipes)
-    .subscribe(response => {
+      .subscribe(response => {
         console.log(response);
       });
   }
 
-  fetchRecipes(){
-    return this.http
-    .get<Recipe[]>('https://ng-course-recipe-book-ccee8-default-rtdb.firebaseio.com/recipes.json'
-    )
-    .pipe(
+  fetchRecipes() {
+    return this.authService.user.pipe(take(1), exhaustMap(user => {
+      return this.http
+        .get<Recipe[]>('https://ng-course-recipe-book-ccee8-default-rtdb.firebaseio.com/recipes.json',
+          {
+            params: new HttpParams().set('auth', user.token)
+          }
+        );
+    }),
       map(recipes => {
         return recipes.map(recipe => {
           return {
@@ -31,7 +36,6 @@ export class DataStorageService{
       }),
       tap(recipes => {
         this.recipeService.setRecipes(recipes);
-      })
-    )
+      }))
   }
 }
