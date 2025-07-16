@@ -28,12 +28,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     console.log("leo component " + this.dataStorageService.storeRecipes());
   }
 
-
   onFetchData() {
     this.dataStorageService.fetchRecipes().subscribe();
   }
 
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 }
