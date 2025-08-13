@@ -1,11 +1,11 @@
-import { ShoppingListService } from './../shopping-list/shopping-list.service';
+import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Injectable } from "@angular/core";
 import { Recipe } from "./recipe.model";
 import { Ingredient } from "../shared/ingredients.mode";
 import { Subject } from 'rxjs';
 
 @Injectable()
-export class RecipeService {
+export class RecipesService {
   recipesChanged = new Subject<Recipe[]>();
 
   // private recipes: Recipe[] = [

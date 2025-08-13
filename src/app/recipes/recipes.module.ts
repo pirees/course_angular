@@ -8,7 +8,8 @@ import { RecipeStartComponent } from './recipe-start/recipe-start.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RecipesRoutingModule } from './recipe-routing.module';
+import { RecipesRoutingModule } from './recipes-routing.module';
+import { SharedModule } from '../shared/shared.modules';
 
 @NgModule ({
     declarations: [
@@ -21,17 +22,9 @@ import { RecipesRoutingModule } from './recipe-routing.module';
     ],
     imports: [
       RouterModule,
-      CommonModule,
+      SharedModule,
       ReactiveFormsModule,
       RecipesRoutingModule
-    ],
-    exports: [
-      RecipesComponent,
-      RecipeListComponent,
-      RecipeDetailComponent,
-      RecipeItemComponent,
-      RecipeStartComponent,
-      RecipeEditComponent
     ]
  })
 export class RecipesModule{
